@@ -2,7 +2,8 @@
 
 module.exports = {
   development: {
-    client: "pg",
+    client: "sqlite3",
+    useNullAsDefault: true,
     connection: {
       filename: "./data/buddy.db3"
     },
@@ -11,7 +12,11 @@ module.exports = {
     },
     seeds: {
       directory: "./data/seeds"
-    }
+    },
+    pool: {
+      afterCreate: (conn, done) => {
+        conn.run("PRAGMA foreign_keys = ON", done)
+      }}
   },
 
   staging: {
