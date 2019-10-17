@@ -1,6 +1,10 @@
-const express = require('express');
-
+const express = require("express");
 const server = express();
-server.use(express.json())
+
+const InterestsRoute = require("./interests/interestsRouter");
+
+server.use(express.json());
+
+server.use("/interests", InterestsRoute);
 
 module.exports = server;
