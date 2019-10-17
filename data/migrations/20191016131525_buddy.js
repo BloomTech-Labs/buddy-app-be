@@ -6,6 +6,10 @@ exports.up = function(knex) {
       tbl
       .string("first_name", 128)
       .notNullable();
+      //last_name
+      tbl
+      .string("last_name", 128)
+      .notNullable();
       // password
       tbl
       .string("password", 128)

@@ -34,6 +34,7 @@ function validateNewUser(req, res, next) {
         res.status(400).json({message: 'Please provide an email'})
     } else if(!user.location) {
         res.status(400).json({message: 'Please provide a zip code'})
+    } else if(!user.last_name){
     } else {
         next();
     }
