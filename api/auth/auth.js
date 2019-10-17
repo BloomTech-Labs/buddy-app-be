@@ -9,6 +9,7 @@ function getUserByEmail(email) {
     return db('users')
     .where({email})
     .first()
+    
 }
 
 function addUser(user) {

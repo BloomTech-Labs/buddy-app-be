@@ -18,7 +18,7 @@ router.post('/signin',validateUser, (req, res) => {
 
 router.post('/signup',validateNewUser, (req, res) => {
     let user = req.body;
-    const hash = bcrypt.hash(user.password, 14)
+    const hash = bcrypt.hashSync(user.password, 14)
     user.password = hash;
     Auth.addUser(user)
     .then(newUser => {
