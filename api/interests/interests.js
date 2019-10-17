@@ -23,9 +23,10 @@ function getInterestById(id) {
 function getUserInterests() {
   return db("user_interests").then(user_interests => user_interests);
 }
+
 function addUserInterest(userInterest) {
   return db("user_interests")
-    .insert(userExperience, "id")
+    .insert(userInterest, "id")
     .then(result => result);
 }
 

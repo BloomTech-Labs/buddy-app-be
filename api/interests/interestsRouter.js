@@ -14,6 +14,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
+  const id = req.params.id;
   Interests.getInterestById(id)
     .then(interest => {
       res.status(200).json(interest);
@@ -25,8 +26,9 @@ router.get("/:id", (req, res) => {
 
 // user interests
 
-router.get("/:userid", (req, res) => {
-  Interests.getUserInterests(userid)
+router.get("/user/:userid", (req, res) => {
+  const userId = req.params.id;
+  Interests.getUserInterests(userId)
     .then(userInterests => {
       res.status(200).json(userInterests);
     })
@@ -35,8 +37,9 @@ router.get("/:userid", (req, res) => {
     });
 });
 
-router.post("/:userid", (req, res) => {
+router.post("/user/:userid", (req, res) => {
   const userInterest = req.body;
+  console.log(userInterest);
   Interests.addUserInterest(userInterest)
     .then(newInterest => {
       res.status(201).json(newInterest);
@@ -46,7 +49,7 @@ router.post("/:userid", (req, res) => {
     });
 });
 
-router.delete("/:userid/:interestid", (req, res) => {
+router.delete("/user/:userid/:interestid", (req, res) => {
   const userId = req.params.userid;
   const interestId = req.params.interestid;
   Interests.deleteUserInterest(userId, interestId).then(res => {
