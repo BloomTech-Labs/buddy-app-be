@@ -1,8 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Auth = require('./auth');
-router.post('/signin', (req, res) => {
+const bcrypt = require('bcryptjs');
+const {validateUser, validateNewUser} = require('./authMiddleware');
+
+router.post('/signin',validateUser, (req, res) => {
     const user = req.body;
+
     Auth.getUserByEmail(user.email)
     .then(loggedInUser => {
         res.status(200).json(loggedInUser)
@@ -12,8 +16,10 @@ router.post('/signin', (req, res) => {
     })
 })
 
-router.post('/signup', (req, res) => {
-    const user = req.body;
+router.post('/signup',validateNewUser, (req, res) => {
+    let user = req.body;
+    const hash = bcrypt.hash(user.password, 14)
+    user.password = hash;
     Auth.addUser(user)
     .then(newUser => {
         res.status(201).json(newUser)
