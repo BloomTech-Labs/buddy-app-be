@@ -3,7 +3,14 @@ exports.up = function(knex) {
     .createTable("users", tbl => {
       tbl.increments();
       // first name
-      tbl.string("first_name", 128).notNullable();
+      tbl
+      .string("first_name", 128)
+      .notNullable();
+      //last_name
+      tbl
+      .string("last_name", 128)
+      .notNullable();
+
       // password
       tbl.string("password", 128).notNullable();
       // email
