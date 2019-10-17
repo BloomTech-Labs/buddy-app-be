@@ -20,7 +20,7 @@ function getInterestById(id) {
 
 // user interests
 
-function getUserInterests() {
+function getUserInterests(id) {
   return db("user_interests").then(user_interests => user_interests);
 }
 

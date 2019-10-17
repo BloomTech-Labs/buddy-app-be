@@ -37,9 +37,9 @@ router.get("/user/:userid", (req, res) => {
     });
 });
 
-router.post("/user/:userid", (req, res) => {
+router.post("/user", (req, res) => {
   const userInterest = req.body;
-  console.log(userInterest);
+
   Interests.addUserInterest(userInterest)
     .then(newInterest => {
       res.status(201).json(newInterest);
@@ -52,16 +52,16 @@ router.post("/user/:userid", (req, res) => {
 router.delete("/user/:userid/:interestid", (req, res) => {
   const userId = req.params.userid;
   const interestId = req.params.interestid;
-  Interests.deleteUserInterest(userId, interestId).then(res => {
-    res
-      .status(200)
-      .json({
+
+  Interests.deleteUserInterest(userId, interestId)
+    .then(deleted => {
+      res.status(200).json({
         message: `Successfully removed interest #${interestId} from user #${userId}`
-      })
-      .catch(err => {
-        res.status(500).json({ error: err });
       });
-  });
+    })
+    .catch(err => {
+      res.status(500).json({ error: err });
+    });
 });
 
 module.exports = router;
