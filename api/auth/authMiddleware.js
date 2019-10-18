@@ -12,6 +12,7 @@ function validateUser(req, res, next) {
     Auth.getUserByEmail(user.email)
     .then(returnedUser => {
         if(returnedUser) {
+            console.log(user)
            if(bcrypt.compareSync(user.password, returnedUser.password)) {
                next()
            } else{
