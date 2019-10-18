@@ -16,6 +16,6 @@ function addUser(user) {
     return db('users')
     .insert(user, 'id')
     .then(res => {
-        getUserByEmail(user.email).then(newUser => newUser)
+        return getUserByEmail(user.email).then(newUser => newUser)
     })
 }
