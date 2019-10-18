@@ -28,7 +28,7 @@ function updateUser(id, user) {
     .where({ id })
     .update(user)
     .then(res => {
-      getUserById(id).then(updatedUser => updatedUser);
+      return getUserById(id).then(updatedUser => updatedUser);
     });
 }
 
