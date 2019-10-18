@@ -20,7 +20,8 @@ router.get("/", (req, res) => {
 
 // get a specific interest by id
 router.get("/:interestid", validateInterest, (req, res) => {
-  const id = req.params.id;
+  const id = req.params.interestid;
+
   Interests.getInterestById(id)
     .then(interest => {
       res.status(200).json(interest);
@@ -34,7 +35,8 @@ router.get("/:interestid", validateInterest, (req, res) => {
 
 // get the interests associated with a specific userid
 router.get("/user/:userid", (req, res) => {
-  const userId = req.params.id;
+  const userId = req.params.userid;
+
   Interests.getUserInterests(userId)
     .then(userInterests => {
       res.status(200).json(userInterests);
