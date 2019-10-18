@@ -20,7 +20,8 @@ router.get("/", (req, res) => {
 
 // get a specific interest by id
 router.get("/:interestid", validateInterest, (req, res) => {
-  const id = req.params.id;
+  const id = req.params.interestid;
+
   Interests.getInterestById(id)
     .then(interest => {
       res.status(200).json(interest);
