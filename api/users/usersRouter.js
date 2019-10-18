@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Users = require("./users");
+
 const {validateUser, validateUpdatedUser} = require('./usersMiddleware')
+
 router.get("/", (req, res) => {
   Users.getUsers()
     .then(users => {
