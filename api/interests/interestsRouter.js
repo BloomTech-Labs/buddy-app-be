@@ -35,7 +35,8 @@ router.get("/:interestid", validateInterest, (req, res) => {
 
 // get the interests associated with a specific userid
 router.get("/user/:userid", (req, res) => {
-  const userId = req.params.id;
+  const userId = req.params.userid;
+
   Interests.getUserInterests(userId)
     .then(userInterests => {
       res.status(200).json(userInterests);
