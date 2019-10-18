@@ -25,9 +25,19 @@ function getUserInterests(id) {
 }
 
 function addUserInterest(userInterest) {
+  let user_id = userInterest.user_id;
+  let interests_id = userInterest.interests_id;
+
   return db("user_interests")
     .insert(userInterest, "id")
-    .then(result => result);
+    .then(result => {
+      return db("user_interests as ui")
+        .join("users as u", "ui.user_id", "u.id")
+        .join("interests as i", "ui.interests_id", "i.id")
+        .select("u.first_name", "i.name")
+        .where({ user_id: user_id, interests_id: interests_id })
+        .first();
+    });
 }
 
 function deleteUserInterest(user_id, interest_id) {

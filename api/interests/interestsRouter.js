@@ -2,7 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const Interests = require("./interests.js");
+const {
+  validateInterest,
+  validateUserInterest
+} = require("./interestsMiddleware");
 
+// get a list of all interests available (controlled by seed data)
 router.get("/", (req, res) => {
   Interests.getInterests()
     .then(interests => {
@@ -13,7 +18,8 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
+// get a specific interest by id
+router.get("/:interestid", validateInterest, (req, res) => {
   const id = req.params.id;
   Interests.getInterestById(id)
     .then(interest => {
@@ -26,6 +32,7 @@ router.get("/:id", (req, res) => {
 
 // user interests
 
+// get the interests associated with a specific userid
 router.get("/user/:userid", (req, res) => {
   const userId = req.params.id;
   Interests.getUserInterests(userId)
@@ -37,7 +44,8 @@ router.get("/user/:userid", (req, res) => {
     });
 });
 
-router.post("/user", (req, res) => {
+// add a user & their interest to the user_interests table
+router.post("/user", validateInterest, (req, res) => {
   const userInterest = req.body;
 
   Interests.addUserInterest(userInterest)
@@ -49,7 +57,8 @@ router.post("/user", (req, res) => {
     });
 });
 
-router.delete("/user/:userid/:interestid", (req, res) => {
+// remove an interest from being associated with a particular user
+router.delete("/user/:userid/:interestid", validateUserInterest, (req, res) => {
   const userId = req.params.userid;
   const interestId = req.params.interestid;
 
