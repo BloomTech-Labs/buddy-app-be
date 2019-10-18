@@ -1,5 +1,9 @@
 const express = require("express");
 const server = express();
+const cors = require("cors");
+const passport = require("passport");
+const GoogleStrategy = require("passport-google");
+const keys = require("../config");
 
 const InterestsRoute = require("./interests/interestsRouter");
 const UsersRoute = require("./users/usersRouter");
