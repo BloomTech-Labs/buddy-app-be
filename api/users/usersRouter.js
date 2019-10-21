@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Users = require("./users");
 
-const {validateUser, validateUpdatedUser} = require('./usersMiddleware')
+const { validateUser, validateUpdatedUser } = require("./usersMiddleware");
 
 router.get("/", (req, res) => {
   Users.getUsers()
@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id",validateUser, (req, res) => {
+router.get("/:id", validateUser, (req, res) => {
   const id = req.params.id;
   Users.getUserById(id)
     .then(user => {
@@ -36,7 +36,7 @@ router.delete("/:id", validateUser, (req, res) => {
     });
 });
 
-router.put("/:id",validateUser, validateUpdatedUser, (req, res) => {
+router.put("/:id", validateUser, validateUpdatedUser, (req, res) => {
   const user = req.body;
   const id = req.params.id;
   Users.updateUser(id, user)

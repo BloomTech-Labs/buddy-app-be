@@ -29,22 +29,4 @@ router.post("/signup", validateNewUser, (req, res) => {
     });
 });
 
-// google sign on
-server.get(
-  "/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"]
-  })
-);
-
-server.get("/google/callback", passport.authenticate("google"), (req, res) => {
-  res.redirect("/profile");
-});
-
-server.get("/logout", (req, res) => {
-  console.log("logging out!");
-  user = {};
-  res.redirect("/");
-});
-
 module.exports = router;
