@@ -27,7 +27,12 @@ router.post("/signin", validateUser, (req, res) => {
             expiresIn: "1d"
           }
         );
-        res.status(200).json({ token: token });
+        res.status(200).json({
+          token: token,
+          first_name: loggedInUser.first_name,
+          last_name: loggedInUser.last_name,
+          id: loggedInUser.id
+        });
       } else {
         res.status(401).json({ message: "Invalid Credentials" });
       }
