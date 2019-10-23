@@ -29,7 +29,7 @@ function addUserInterest(userInterest) {
   let interests_id = userInterest.interests_id;
 
   return db("user_interests")
-    .insert(userInterest, "id")
+    .insert(userInterest)
     .then(result => {
       return db("user_interests as ui")
         .join("users as u", "ui.user_id", "u.id")
