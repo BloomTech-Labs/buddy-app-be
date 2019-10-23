@@ -49,7 +49,11 @@ router.post("/signup", validateNewUser, (req, res) => {
   user.password = hash;
   Auth.addUser(user)
     .then(newUser => {
-      res.status(201).json(newUser);
+      //generate a token for auth
+      const token = jwt.sign({ email: newUser.email }, secrets.jwtSecret, {
+        expiresIn: "1d"
+      });
+      res.status(201).json({ token: token, newUser });
     })
     .catch(err => {
       res.status(500).json({ error: err });
