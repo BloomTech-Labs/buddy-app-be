@@ -5,7 +5,11 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secrets = require("../config/secrets");
 
-const { validateUser, validateNewUser } = require("./authMiddleware");
+const {
+  validateUser,
+  validateNewUser,
+  checkExistingUser
+} = require("./authMiddleware");
 
 // user logins with email and password
 router.post("/signin", validateUser, (req, res) => {
@@ -42,7 +46,7 @@ router.post("/signin", validateUser, (req, res) => {
     });
 });
 
-router.post("/signup", validateNewUser, (req, res) => {
+router.post("/signup", validateNewUser, checkExistingUser, (req, res) => {
   let user = req.body;
   //hash user's password
   const hash = bcrypt.hashSync(user.password, 14);

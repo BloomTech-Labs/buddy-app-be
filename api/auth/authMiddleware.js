@@ -7,6 +7,7 @@ const secrets = require("../config/secrets.js");
 module.exports = {
   validateUser,
   validateNewUser,
+  checkExistingUser,
   jwtauth
 };
 
@@ -28,6 +29,7 @@ function validateUser(req, res, next) {
 
 function validateNewUser(req, res, next) {
   const user = req.body;
+
   if (!user.first_name) {
     res.status(400).json({ message: "Please provide a first name" });
   } else if (!user.password) {
@@ -37,9 +39,22 @@ function validateNewUser(req, res, next) {
   } else if (!user.location) {
     res.status(400).json({ message: "Please provide a zip code" });
   } else if (!user.last_name) {
+    res.status(400).json({ message: "Please provide a last name" });
   } else {
     next();
   }
+}
+
+function checkExistingUser(req, res, next) {
+  const user = req.body;
+
+  Auth.getUserByEmail(user)
+    .then(user =>
+      user
+        ? res.status(400).json({ message: "This user already exists" })
+        : next()
+    )
+    .catch(err => res.status(500).json({ error: err }));
 }
 
 function jwtauth(req, res, next) {
