@@ -48,7 +48,7 @@ function validateNewUser(req, res, next) {
 function checkExistingUser(req, res, next) {
   const user = req.body;
 
-  Auth.getUserByEmail(user)
+  Auth.getUserByEmail(user.email)
     .then(user =>
       user
         ? res.status(400).json({ message: "This user already exists" })
