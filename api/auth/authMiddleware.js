@@ -51,7 +51,9 @@ function checkExistingUser(req, res, next) {
   Auth.getUserByEmail(user.email)
     .then(user =>
       user
-        ? res.status(400).json({ message: "This user already exists" })
+        ? res.status(400).json({
+            message: `The email address ${user.email} already has an account associated.`
+          })
         : next()
     )
     .catch(err => res.status(500).json({ error: err }));
