@@ -12,6 +12,7 @@ function validateActivityId(req, res, next) {
   Activities.getActivityById(activityId)
     .then(activity => {
       if (activity) {
+        req.activity = activity;
         next();
       } else {
         return res.status(404).json({

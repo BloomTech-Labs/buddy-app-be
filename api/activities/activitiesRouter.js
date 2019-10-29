@@ -20,6 +20,11 @@ router.get("/", (req, res) => {
     });
 });
 
+// GET an activity by activityId
+router.get("/:activityId", validateActivityId, (req, res) => {
+  res.status(200).json(req.activity);
+});
+
 // GET a list of activities by interestId
 router.get("/interests/:interestId", (req, res) => {
   const { interestId } = req.params;
