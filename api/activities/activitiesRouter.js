@@ -15,6 +15,38 @@ router.get("/", (req, res) => {
     });
 });
 
+// GET a list of activities by interestId
+router.get("/interests/:interestId", (req, res) => {
+  const { interestId } = req.params;
+
+  Activities.getActivitiesByInterests(interestId)
+    .then(activities => {
+      res.status(200).json(activities);
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: "Error occurred while getting activities by interestId",
+        error: err
+      });
+    });
+});
+
+// GET a list of all activities by organizerId
+router.get("/organizer/:organizerId", (req, res) => {
+  const { organizerId } = req.params;
+
+  Activities.getActivitiesByOrganizer(organizerId)
+    .then(activities => {
+      res.status(200).json(activities);
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: "Error occurred while getting activities by organizerId",
+        error: err
+      });
+    });
+});
+
 // POST /activities
 router.post("/", (req, res) => {
   const activity = req.body;
@@ -45,6 +77,8 @@ router.put("/:activityId", (req, res) => {
         message: "Error occurred while updating an activity.",
         error: err
       });
+    });
+});
 
 // DELETE an activity by its ID
 router.delete("/:activityId", (req, res) => {
