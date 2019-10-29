@@ -18,6 +18,14 @@ function getActivityById(id) {
     .first();
 }
 
+function getActivitiesByInterests(interest_id) {
+  return db("activities").where({ interest_id });
+}
+
+function getActivitiesByOrganizer(organizer_id) {
+  return db("activities").where({ organizer_id });
+}
+
 function addActivity(activity) {
   return db("activities")
     .insert(activity, "id")
