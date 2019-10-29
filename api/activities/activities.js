@@ -3,6 +3,8 @@ const db = require("../../data/dbconfig");
 module.exports = {
   getActivities,
   getActivityById,
+  getActivitiesByInterests,
+  getActivitiesByOrganizer,
   addActivity,
   updateActivity,
   deleteActivity
