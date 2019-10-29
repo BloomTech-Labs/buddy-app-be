@@ -4,6 +4,11 @@ const Activities = require("./activities");
 
 const router = express.Router();
 
+const {
+  validateActivityId,
+  validateNewActivity
+} = require("./activitiesMiddleware");
+
 // GET a list of all activities
 router.get("/", (req, res) => {
   Activities.getActivities()
@@ -48,7 +53,7 @@ router.get("/organizer/:organizerId", (req, res) => {
 });
 
 // POST /activities
-router.post("/", (req, res) => {
+router.post("/", validateNewActivity, (req, res) => {
   const activity = req.body;
 
   Activities.addActivity(activity)
@@ -64,7 +69,7 @@ router.post("/", (req, res) => {
 });
 
 // PUT /activities/:activityId
-router.put("/:activityId", (req, res) => {
+router.put("/:activityId", validateActivityId, (req, res) => {
   const { activityId } = req.params;
   const changes = req.body;
 
@@ -81,7 +86,7 @@ router.put("/:activityId", (req, res) => {
 });
 
 // DELETE an activity by its ID
-router.delete("/:activityId", (req, res) => {
+router.delete("/:activityId", validateActivityId, (req, res) => {
   const activityId = req.params.activityId;
   Activities.deleteActivity(activityId)
     .then(deleted => {
