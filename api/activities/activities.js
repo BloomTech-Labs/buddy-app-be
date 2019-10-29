@@ -2,16 +2,27 @@ const db = require("../../data/dbconfig");
 
 module.exports = {
   getActivities,
+  getActivityById,
   addActivity,
   updateActivity,
   deleteActivity
 };
 
+function getActivities() {
+  return db("activities");
+}
+
+function getActivityById(id) {
+  return db("activities")
+    .where({ id })
+    .first();
+}
+
 function addActivity(activity) {
   return db("activities")
     .insert(activity, "id")
-    .then(res => {
-      // return getActivityById()
+    .then(([id]) => {
+      return getActivityById(id);
     });
 }
 
@@ -20,12 +31,8 @@ function updateActivity(id, activity) {
     .where({ id })
     .update(activity)
     .then(res => {
-      // return getActivityById()
+      return getActivityById(id);
     });
-}
-
-function getActivities() {
-  return db("activities");
 }
 
 function deleteActivity(id) {
