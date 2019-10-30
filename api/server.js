@@ -11,8 +11,7 @@ const { jwtauth } = require("./auth/authMiddleware");
 
 server.use(express.json());
 
-// server.use('/activities', jwtauth, ActivitiesRoute);
-server.use("/activities", ActivitiesRoute);
+server.use("/activities", jwtauth, ActivitiesRoute);
 server.use("/interests", jwtauth, InterestsRoute);
 server.use("/users", jwtauth, UsersRoute);
 server.use("/auth", AuthRoute);
