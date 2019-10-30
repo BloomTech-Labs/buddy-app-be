@@ -86,7 +86,7 @@ function addActivity(activity) {
   return db("activities")
     .insert(activity, "id")
     .then(([id]) => {
-      return getActivityById(id);
+      return getActivityById(id).then(newActivity => newActivity);
     });
 }
 
@@ -95,7 +95,7 @@ function updateActivity(id, activity) {
     .where({ id })
     .update(activity)
     .then(res => {
-      return getActivityById(id);
+      return getActivityById(id).then(newActivity => newActivity);
     });
 }
 
