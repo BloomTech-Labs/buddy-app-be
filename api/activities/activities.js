@@ -11,21 +11,75 @@ module.exports = {
 };
 
 function getActivities() {
-  return db("activities");
+  return db("activities as a")
+    .join("users as u", "a.organizer_id", "=", "u.id")
+    .select(
+      "a.id",
+      "a.name",
+      "a.notes",
+      "a.date",
+      "a.time",
+      "a.guest_limit",
+      "a.organizer_id",
+      "a.interest_id",
+      "a.location",
+      "u.first_name as organizer_name"
+    );
 }
 
 function getActivityById(id) {
-  return db("activities")
+  return db("activities as a")
     .where({ id })
+    .join("users as u", "a.organizer_id", "=", "u.id")
+    .select(
+      "a.id",
+      "a.name",
+      "a.notes",
+      "a.date",
+      "a.time",
+      "a.guest_limit",
+      "a.organizer_id",
+      "a.interest_id",
+      "a.location",
+      "u.first_name as organizer_name"
+    )
     .first();
 }
 
 function getActivitiesByInterests(interest_id) {
-  return db("activities").where({ interest_id });
+  return db("activities as a")
+    .where({ interest_id })
+    .join("users as u", "a.organizer_id", "=", "u.id")
+    .select(
+      "a.id",
+      "a.name",
+      "a.notes",
+      "a.date",
+      "a.time",
+      "a.guest_limit",
+      "a.organizer_id",
+      "a.interest_id",
+      "a.location",
+      "u.first_name as organizer_name"
+    );
 }
 
 function getActivitiesByOrganizer(organizer_id) {
-  return db("activities").where({ organizer_id });
+  return db("activities as a")
+    .where({ organizer_id })
+    .join("users as u", "a.organizer_id", "=", "u.id")
+    .select(
+      "a.id",
+      "a.name",
+      "a.notes",
+      "a.date",
+      "a.time",
+      "a.guest_limit",
+      "a.organizer_id",
+      "a.interest_id",
+      "a.location",
+      "u.first_name as organizer_name"
+    );
 }
 
 function addActivity(activity) {
