@@ -30,19 +30,6 @@ function getActivities() {
 function getActivityById(id) {
   return db("activities as a")
     .where({ id })
-    .join("users as u", "a.organizer_id", "=", "u.id")
-    .select(
-      "a.id",
-      "a.name",
-      "a.notes",
-      "a.date",
-      "a.time",
-      "a.guest_limit",
-      "a.organizer_id",
-      "a.interest_id",
-      "a.location",
-      "u.first_name as organizer_name"
-    )
     .first();
 }
 
