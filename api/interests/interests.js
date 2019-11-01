@@ -20,8 +20,10 @@ function getInterestById(id) {
 
 // user interests
 
-function getUserInterests(id) {
-  return db("user_interests").then(user_interests => user_interests);
+function getUserInterests(user_id) {
+  return db("user_interests")
+    .where({ user_id })
+    .then(user_interests => user_interests);
 }
 
 function addUserInterest(userInterest) {
