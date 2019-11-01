@@ -82,7 +82,7 @@ describe("usersRouter.js", () => {
       expect(res.status).toBe(200);
     });
 
-    it("gets user by id", async () => {
+    it("deletes by id", async () => {
       let res = await request(server)
         .del("/users/1")
         .set("Authorization", `${token}`);
