@@ -98,4 +98,43 @@ describe("usersRouter.js", () => {
       expect(res.body).toHaveLength(1);
     });
   });
+
+  describe("PUT /users/:id", () => {
+    it("responds with 200 OK", async () => {
+      const changes = {
+        first_name: "Kevin"
+      };
+
+      const res = await request(server)
+        .put("/users/1")
+        .set("Authorization", `${token}`)
+        .send(changes);
+
+      expect(res.status).toBe(200);
+    });
+
+    it("updates changes for the user with the appropriate id", async () => {
+      const changes = {
+        first_name: "Kevin"
+      };
+
+      let res = await request(server)
+        .put("/users/2")
+        .set("Authorization", `${token}`)
+        .send(changes);
+
+      res = await request(server)
+        .get("/users/2")
+        .set("Authorization", `${token}`);
+
+      expect(res.body).toStrictEqual({
+        id: 2,
+        first_name: "Kevin",
+        last_name: "Red",
+        password: "pass",
+        email: "test2@gmail.com",
+        location: "66666"
+      });
+    });
+  });
 });
