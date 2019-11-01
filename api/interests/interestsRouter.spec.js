@@ -3,7 +3,6 @@ const request = require("supertest");
 const db = require("../../data/dbconfig.js");
 
 const server = require("../server.js");
-const Interests = require("./interests");
 
 // allows testing to be authorized
 let token;
@@ -29,17 +28,35 @@ beforeAll(done => {
 });
 
 describe("interests", () => {
-  beforeEach(async () => {
-    await db("interests").truncate();
-  });
+  beforeEach(() => db.seed.run());
 
   describe("GET /interests", () => {
-    it("should return status 200", () => {
-      return request(server)
+    it("should return status 200", async () => {
+      //   return request(server)
+      //     .get("/interests")
+      //     .set("Authorization", `${token}`)
+      //     .then(res => {
+      //       expect(res.status).toBe(200);
+      //       expect(res.body).toHaveLength(5);
+      //     });
+
+      const res = await request(server)
         .get("/interests")
+        .set("Authorization", `${token}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveLength(5);
+    });
+  });
+
+  describe("GET /interests/:interestid", () => {
+    it("should return Sports", () => {
+      return request(server)
+        .get("/interests/1")
         .set("Authorization", `${token}`)
         .then(res => {
-          expect(res.status).toBe(200);
+          //   expect(res.body).toStrictEqual({ id: 1, name: "Sports" });
+          expect(res.body).toBe("Sports");
         });
     });
   });

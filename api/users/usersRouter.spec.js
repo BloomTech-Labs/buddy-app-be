@@ -26,7 +26,7 @@ beforeAll(done => {
     });
 });
 
-describe("usersRouter.js", () => {
+describe.skip("usersRouter.js", () => {
   // Re-runs the seeds before each test
   beforeEach(() => db.seed.run());
 
@@ -48,7 +48,7 @@ describe("usersRouter.js", () => {
     });
   });
 
-  describe("GET /users/:id", () => {
+  describe.skip("GET /users/:id", () => {
     it("responds with 200 OK", async () => {
       const res = await request(server)
         .get("/users/1")
@@ -73,7 +73,7 @@ describe("usersRouter.js", () => {
     });
   });
 
-  describe("DELETE /users/:id", () => {
+  describe.skip("DELETE /users/:id", () => {
     it("responds with 200 OK", async () => {
       const res = await request(server)
         .del("/users/1")
