@@ -17,12 +17,20 @@ function getAllUserActivities() {
   Gets both the user's created activities and the user's joined activities. returns the name, date, time and description of each activity. 
  */
 function getAllActivities(user_id) {
-  return db("user_activities")
+  return db("user_activities as ua")
+    .join("activities as a", "ua.activity_id", "a.id")
+    .join("users as u", "a.organizer_id", "u.id")
     .where({ user_id })
-    .join("activities", "user_activities.user_id", "activities.organizer_id")
-    .join("activities", "user_activities.activies_id", "activities.id")
-    // .select("activities.date", "activities.name", "activities.time", "activities.notes")
-
+    .select("a.*", "u.first_name as organizer_name")
+    .then(joined => {
+      return db("activities as a")
+        .where("organizer_id", user_id)
+        .join("users as u", "a.organizer_id", "=", "u.id")
+        .select("a.*", "u.first_name as organizer_name")
+        .then(organizer => {
+          return [...joined, ...organizer];
+        });
+    });
 }
 
 function getUserActivitiesByUserId(user_id) {
