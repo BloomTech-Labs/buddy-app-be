@@ -1,6 +1,7 @@
 const db = require("../../data/dbconfig.js");
 
 module.exports = {
+  getAllActivities,
   getAllUserActivities,
   getUserActivitiesByUserId,
   getUserActivitiesByActivityId,
@@ -10,6 +11,18 @@ module.exports = {
 
 function getAllUserActivities() {
   return db("user_activities");
+}
+
+/* 
+  Gets both the user's created activities and the user's joined activities. returns the name, date, time and description of each activity. 
+ */
+function getAllActivities(user_id) {
+  return db("user_activities")
+    .where({ user_id })
+    .join("activities", "user_activities.user_id", "activities.organizer_id")
+    .join("activities", "user_activities.activies_id", "activities.id")
+    // .select("activities.date", "activities.name", "activities.time", "activities.notes")
+
 }
 
 function getUserActivitiesByUserId(user_id) {

@@ -34,6 +34,22 @@ router.get("/user/:user_id", (req, res) => {
     });
 });
 
+// GET /useractivities/activities/:user_id - Get all activities (created and  joined) by the user 
+router.get("/activities/:user_id", (req, res) => {
+  const { user_id } = req.params; 
+
+  UserActivities.getAllActivities(user_id)
+    .then(allActivities => {
+      res.status(200).json(allActivities); 
+    }) 
+    .catch(err => {
+      res.status(500).json({
+        message: `An error occured while processing the request for ${user_id}`, 
+        error: err
+      })
+    })
+})
+
 // GET /useractivities/activity/:activity_id - Get all users associated to the activity_id
 router.get("/activity/:activity_id", (req, res) => {
   const { activity_id } = req.params;
