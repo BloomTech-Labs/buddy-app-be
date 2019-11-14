@@ -34,21 +34,21 @@ router.get("/user/:user_id", (req, res) => {
     });
 });
 
-// GET /useractivities/activities/:user_id - Get all activities (created and  joined) by the user 
+// GET /useractivities/activities/:user_id - Get all activities (created and  joined) by the user
 router.get("/activities/:user_id", (req, res) => {
-  const { user_id } = req.params; 
+  const { user_id } = req.params;
 
   UserActivities.getAllActivities(user_id)
     .then(allActivities => {
-      res.status(200).json(allActivities); 
-    }) 
+      res.status(200).json(allActivities);
+    })
     .catch(err => {
       res.status(500).json({
-        message: `An error occured while processing the request for ${user_id}`, 
+        message: `An error occurred while processing the request for ${user_id}`,
         error: err
-      })
-    })
-})
+      });
+    });
+});
 
 // GET /useractivities/activity/:activity_id - Get all users associated to the activity_id
 router.get("/activity/:activity_id", (req, res) => {
@@ -82,6 +82,19 @@ router.post("/", (req, res) => {
     });
 });
 
-// router.delete("", (req, res) => {})
+router.delete("/:user_id/:activity_id", (req, res) => {
+  const { user_id, activity_id } = req.params;
+
+  UserActivities.deleteUserActivity(user_id, activity_id)
+    .then(deleted => {
+      res.status(200).json({ message: "Successfully left activity" });
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: "Error occurred while deleting a user_activity",
+        error: err
+      });
+    });
+});
 
 module.exports = router;
