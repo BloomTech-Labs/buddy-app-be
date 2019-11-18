@@ -9,19 +9,6 @@ module.exports = {
   deleteUserActivity,
   getAllActivitiesNotAssociatedWithId
 };
-function getUnique(arr, comp) {
-  const unique = arr
-    .map(e => e[comp])
-
-    // store the keys of the unique objects
-    .map((e, i, final) => final.indexOf(e) === i && i)
-
-    // eliminate the dead keys & store unique objects
-    .filter(e => arr[e])
-    .map(e => arr[e]);
-
-  return unique;
-} //helper function to return an array of unique activites in the getAllActivitiesNotAssociatedWithId helper function
 
 function getAllUserActivities() {
   return db("user_activities");
@@ -54,16 +41,16 @@ function getAllActivitiesNotAssociatedWithId(user_id) {
     .join("users as u", "a.organizer_id", "u.id")
     .select("a.*", "u.first_name as organizer_name")
     .then(joined => {
-      let unique = getUnique(joined, "id");
-
       return db("activities as a")
         .join("users as u", "a.organizer_id", "=", "u.id")
         .select("a.*", "u.first_name as organizer_name")
         .then(activities => {
-          const idArray = unique.map(act => act.id);
+          const idArray = joined.map(act => act.id);
 
           const filteredArray = activities.map(act => {
-            if (!idArray.includes(act.id)) {
+            if (idArray.includes(act.id)) {
+              return;
+            } else {
               return act;
             }
           });
