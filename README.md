@@ -1,61 +1,86 @@
-🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
+# Buddy App v1.0
 
-🚫 The numbers 1️⃣ through 3️⃣ next to each item represent the week that part of the docs needs to be comepleted by.  Make sure to delete the numbers by the end of Labs.
+<p align="center">
+    <img src="https://i.imgur.com/5whhrre.png"
+        height="130">
+</p>
 
-🚫 Each student has a required minimum number of meaningful PRs each week per the rubric.  Contributing to docs does NOT count as a PR to meet your weekly requirements.
+##### Backend deployed at: [https://buddy-app-be.herokuapp.com/](https://buddy-app-be.herokuapp.com/) <br>
 
-# API Documentation
-
-#### 1️⃣ Backend delpoyed at [🚫name service here](🚫add URL here) <br>
-
-## 1️⃣ Getting started
+## Getting started
 
 To get the server running locally:
 
-🚫 adjust these scripts to match your project
-
 - Clone this repo
-- **yarn install** to install all required dependencies
-- **yarn server** to start the local server
-- **yarn test** to start server using testing environment
+- **npm install** to install all required dependencies
+- **npm run server** to start the local server
+- **npm run test** to start server using testing environment
 
-### Backend framework goes here
+### Backend framework
 
-🚫 Why did you choose this framework?
+The backend framework used for this project was **Express**
 
--    Point One
--    Point Two
--    Point Three
--    Point Four
+Using Express...
+
+- made it fast and easy to set up
+- allowed us to create RESTful API
+- made it easy to connect to SQL servers
+- made it easy to incorporate middleware
 
 ## 2️⃣ Endpoints
 
-🚫This is a placeholder, replace the endpoints, access controll, and descriptioin to match your project
+#### Auth Routes
 
-#### Organization Routes
-
-| Method | Endpoint                | Access Control | Description                                  |
-| ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/organizations/:orgId` | all users      | Returns the information for an organization. |
-| PUT    | `/organizatoins/:orgId` | owners         | Modify an existing organization.             |
-| DELETE | `/organizations/:orgId` | owners         | Delete an organization.                      |
+| Method | Endpoint       | Access Control | Description                                      |
+| ------ | -------------- | -------------- | ------------------------------------------------ |
+| POST   | `/auth/signin` | all users      | Returns info for the logged in user and a token. |
+| POST   | `/auth/signup` | all users      | Creates a new user and returns info and a token. |
 
 #### User Routes
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/users/current`        | all users           | Returns info for the logged in user.               |
-| GET    | `/users/org/:userId`    | owners, supervisors | Returns all users for an organization.             |
-| GET    | `/users/:userId`        | owners, supervisors | Returns info for a single user.                    |
-| POST   | `/users/register/owner` | none                | Creates a new user as owner of a new organization. |
-| PUT    | `/users/:userId`        | owners, supervisors |                                                    |
-| DELETE | `/users/:userId`        | owners, supervisors |                                                    |
+| Method | Endpoint     | Access Control | Description                       |
+| ------ | ------------ | -------------- | --------------------------------- |
+| GET    | `/users`     | all users      | Returns all users.                |
+| GET    | `/users/:id` | all users      | Returns info for a specific user. |
+| PUT    | `/users/:id` | all users      | Updates info for a specific user. |
+| DELETE | `/users/:id` | all users      | Deletes a specific user.          |
+
+#### Interest Routes
+
+| Method | Endpoint                              | Access Control | Description                                       |
+| ------ | ------------------------------------- | -------------- | ------------------------------------------------- |
+| GET    | `/interests`                          | all users      | Returns all interests.                            |
+| GET    | `/interests/:interestid`              | all users      | Returns an interest id and name.                  |
+| GET    | `/interests/user/:userid`             | all users      | Returns all interests for a user.                 |
+| POST   | `/interests/user`                     | all users      | Creates an association of an interest for a user. |
+| DELETE | `/interests/user/:userid/:interestid` | all users      | Deletes an association of an interest for a user. |
+
+#### Activity Routes
+
+| Method | Endpoint                             | Access Control | Description                                        |
+| ------ | ------------------------------------ | -------------- | -------------------------------------------------- |
+| GET    | `/activities`                        | all users      | Returns info for the logged in user.               |
+| GET    | `/activities/:activityId`            | all users      | Returns all users for an organization.             |
+| GET    | `/activities/interests/:interestId`  | all users      | Returns info for a single user.                    |
+| GET    | `/activities/organizer/:organizerId` | all users      | Returns info for a single user.                    |
+| POST   | `/activities`                        | all users      | Creates a new user as owner of a new organization. |
+| PUT    | `/activities/:activityId`            | all users      |                                                    |
+| DELETE | `/activities/:activityId`            | all users      |                                                    |
+
+#### User_Activity Routes
+
+| Method | Endpoint                                | Access Control | Description                                        |
+| ------ | --------------------------------------- | -------------- | -------------------------------------------------- |
+| GET    | `/useractivities/`                      | all users      | Returns info for the logged in user.               |
+| GET    | `/useractivities/user/:user_id`         | all users      | Returns all users for an organization.             |
+| GET    | `/useractivities/activities/:user_id`   | all users      | Returns info for a single user.                    |
+| GET    | `/useractivities/activity/:activity_id` | all users      | Returns info for a single user.                    |
+| POST   | `/useractivities`                       | all users      | Creates a new user as owner of a new organization. |
+| DELETE | `/useractivities/:user_id/:activity_id` | all users      |                                                    |
 
 # Data Model
 
-🚫This is just an example. Replace this with your data model
-
-#### 2️⃣ ORGANIZATIONS
+#### USERS
 
 ---
 
@@ -70,7 +95,7 @@ To get the server running locally:
 }
 ```
 
-#### USERS
+#### ACTIVITIES
 
 ---
 
@@ -123,13 +148,13 @@ In order for the app to function correctly, the user must set up their own envir
 create a .env file that includes the following:
 
 🚫 These are just examples, replace them with the specifics for your app
-    
-    *  STAGING_DB - optional development db for using functionality not available in SQLite
-    *  NODE_ENV - set to "development" until ready for "production"
-    *  JWT_SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-*=+)') for i in range(50)])
-    *  SENDGRID_API_KEY - this is generated in your Sendgrid account
-    *  stripe_secret - this is generated in the Stripe dashboard
-    
+
+_ STAGING_DB - optional development db for using functionality not available in SQLite
+_ NODE\*ENV - set to "development" until ready for "production"
+
+- JWT*SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-_=+)') for i in range(50)])
+  _ SENDGRID_API_KEY - this is generated in your Sendgrid account \* stripe_secret - this is generated in the Stripe dashboard
+
 ## Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
@@ -138,11 +163,12 @@ Please note we have a [code of conduct](./code_of_conduct.md). Please follow it 
 
 ### Issue/Bug Request
 
- **If you are having an issue with the existing project code, please submit a bug report under the following guidelines:**
- - Check first to see if your issue has already been reported.
- - Check to see if the issue has recently been fixed by attempting to reproduce the issue using the latest master branch in the repository.
- - Create a live example of the problem.
- - Submit a detailed bug report including your environment & browser, steps to reproduce the issue, actual and expected outcomes,  where you believe the issue is originating from, and any potential solutions you have considered.
+**If you are having an issue with the existing project code, please submit a bug report under the following guidelines:**
+
+- Check first to see if your issue has already been reported.
+- Check to see if the issue has recently been fixed by attempting to reproduce the issue using the latest master branch in the repository.
+- Create a live example of the problem.
+- Submit a detailed bug report including your environment & browser, steps to reproduce the issue, actual and expected outcomes, where you believe the issue is originating from, and any potential solutions you have considered.
 
 ### Feature Requests
 
