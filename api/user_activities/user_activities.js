@@ -41,7 +41,8 @@ function getAllActivitiesNotAssociatedWithId(user_id) {
     .whereNot({ user_id })
     .select("a.*", "u.first_name as organizer_name")
     .then(joined => {
-      return joined;
+      let unique = [...new Set(joined)];
+      return unique;
     });
 }
 
