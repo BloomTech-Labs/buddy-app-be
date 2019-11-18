@@ -46,15 +46,15 @@ function getAllActivitiesNotAssociatedWithId(user_id) {
         .select("a.*", "u.first_name as organizer_name")
         .then(activities => {
           const idArray = joined.map(act => act.id);
-
-          const filteredArray = activities.map(act => {
-            if (idArray.includes(act.id)) {
-              return;
-            } else {
-              return act;
+          const actArray = [...activities];
+          for (let i = 0; i < actArray.length; i++) {
+            for (let j = 0; j < idArray.length; j++) {
+              if (actArray[i].id == idArray[j]) {
+                const removed = actArray.splice(i, 1);
+              }
             }
-          });
-          return [...filteredArray];
+          }
+          return [...actArray];
         });
     });
 }
