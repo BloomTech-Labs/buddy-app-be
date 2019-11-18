@@ -42,7 +42,7 @@ function getAllActivitiesNotAssociatedWithId(user_id) {
     .select("a.*", "u.first_name as organizer_name")
     .then(joined => {
       return db("activities as a")
-        .where({ organizer_id: !user_id })
+        .where({ organizer_id: user_id })
         .join("users as u", "a.organizer_id", "=", "u.id")
         .select("a.*", "u.first_name as organizer_name")
         .then(organizer => {
