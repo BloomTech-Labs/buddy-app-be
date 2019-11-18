@@ -50,6 +50,21 @@ router.get("/activities/:user_id", (req, res) => {
     });
 });
 
+router.get("/activities/notattending/:user_id", (req, res) => {
+  const { user_id } = req.params;
+
+  UserActivities.getAllActivitiesNotAssociatedWithId(user_id)
+    .then(allActivities => {
+      res.status(200).json(allActivities);
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: `An error occurred while processing the request for ${user_id}`,
+        error: err
+      });
+    });
+});
+
 // GET /useractivities/activity/:activity_id - Get all users associated to the activity_id
 router.get("/activity/:activity_id", (req, res) => {
   const { activity_id } = req.params;
