@@ -38,7 +38,7 @@ function getAllActivitiesNotAssociatedWithId(user_id) {
   return db("user_activities as ua")
     .join("activities as a", "ua.activity_id", "a.id")
     .join("users as u", "a.organizer_id", "u.id")
-    .where({ user_id: !user_id })
+    .whereNot({ user_id })
     .select("a.*", "u.first_name as organizer_name")
     .then(joined => {
       return db("activities as a")
