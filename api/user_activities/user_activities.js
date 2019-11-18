@@ -49,19 +49,25 @@ function getAllActivities(user_id) {
 
 function getAllActivitiesNotAssociatedWithId(user_id) {
   return db("user_activities as ua")
+    .where("ua.user_id", user_id)
     .join("activities as a", "ua.activity_id", "a.id")
     .join("users as u", "a.organizer_id", "u.id")
-
-    .select("a.*", "u.first_name as organizer_name", "ua.user_id")
+    .select("a.*", "u.first_name as organizer_name")
     .then(joined => {
       let unique = getUnique(joined, "id");
-      unique = unique.filter(act => act.user_id !== user_id);
+
       return db("activities as a")
-        .where("organizer_id", user_id)
         .join("users as u", "a.organizer_id", "=", "u.id")
         .select("a.*", "u.first_name as organizer_name")
-        .then(organizer => {
-          return [...unique, ...organizer];
+        .then(activities => {
+          const idArray = unique.map(act => act.id);
+
+          const filteredArray = activities.map(act => {
+            if (!idArray.includes(act.id)) {
+              return act;
+            }
+          });
+          return [...filteredArray];
         });
     });
 }
