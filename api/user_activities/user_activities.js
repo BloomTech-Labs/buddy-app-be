@@ -55,7 +55,13 @@ function getAllActivitiesNotAssociatedWithId(user_id) {
     .select("a.*", "u.first_name as organizer_name")
     .then(joined => {
       let unique = getUnique(joined, "id");
-      return unique;
+      return db("activities as a")
+        .where("organizer_id", user_id)
+        .join("users as u", "a.organizer_id", "=", "u.id")
+        .select("a.*", "u.first_name as organizer_name")
+        .then(organizer => {
+          return [...unique, ...organizer];
+        });
     });
 }
 
