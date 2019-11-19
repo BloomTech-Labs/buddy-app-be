@@ -27,7 +27,7 @@ Using Express...
 - made it easy to connect to SQL servers
 - made it easy to incorporate middleware
 
-## 2️⃣ Endpoints
+## Endpoints
 
 #### Auth Routes
 
@@ -57,28 +57,29 @@ Using Express...
 
 #### Activity Routes
 
-| Method | Endpoint                             | Access Control | Description                                        |
-| ------ | ------------------------------------ | -------------- | -------------------------------------------------- |
-| GET    | `/activities`                        | all users      | Returns info for the logged in user.               |
-| GET    | `/activities/:activityId`            | all users      | Returns all users for an organization.             |
-| GET    | `/activities/interests/:interestId`  | all users      | Returns info for a single user.                    |
-| GET    | `/activities/organizer/:organizerId` | all users      | Returns info for a single user.                    |
-| POST   | `/activities`                        | all users      | Creates a new user as owner of a new organization. |
-| PUT    | `/activities/:activityId`            | all users      |                                                    |
-| DELETE | `/activities/:activityId`            | all users      |                                                    |
+| Method | Endpoint                             | Access Control | Description                                |
+| ------ | ------------------------------------ | -------------- | ------------------------------------------ |
+| GET    | `/activities`                        | all users      | Returns all activities.                    |
+| GET    | `/activities/:activityId`            | all users      | Returns an activity by id.                 |
+| GET    | `/activities/interests/:interestId`  | all users      | Returns activities based on interest.      |
+| GET    | `/activities/organizer/:organizerId` | all users      | Returns activities based on the organizer. |
+| POST   | `/activities`                        | all users      | Creates a new activity.                    |
+| PUT    | `/activities/:activityId`            | all users      | Updates an activity.                       |
+| DELETE | `/activities/:activityId`            | all users      | Deletes an activity.                       |
 
 #### User_Activity Routes
 
-| Method | Endpoint                                | Access Control | Description                                        |
-| ------ | --------------------------------------- | -------------- | -------------------------------------------------- |
-| GET    | `/useractivities/`                      | all users      | Returns info for the logged in user.               |
-| GET    | `/useractivities/user/:user_id`         | all users      | Returns all users for an organization.             |
-| GET    | `/useractivities/activities/:user_id`   | all users      | Returns info for a single user.                    |
-| GET    | `/useractivities/activity/:activity_id` | all users      | Returns info for a single user.                    |
-| POST   | `/useractivities`                       | all users      | Creates a new user as owner of a new organization. |
-| DELETE | `/useractivities/:user_id/:activity_id` | all users      |                                                    |
+| Method | Endpoint                                           | Access Control | Description                                           |
+| ------ | -------------------------------------------------- | -------------- | ----------------------------------------------------- |
+| GET    | `/useractivities/`                                 | all users      | Returns all user/activity pairs.                      |
+| GET    | `/useractivities/user/:user_id`                    | all users      | Returns all activity ids a user has joined.           |
+| GET    | `/useractivities/activities/:user_id`              | all users      | Returns all activities a user is associated with.     |
+| GET    | `/useractivities/activities/notattending/:user_id` | all users      | Returns all activities a user is NOT associated with. |
+| GET    | `/useractivities/activity/:activity_id`            | all users      | Returns all user ids an activity has.                 |
+| POST   | `/useractivities`                                  | all users      | Creates an association for a user and an activity.    |
+| DELETE | `/useractivities/:user_id/:activity_id`            | all users      | Deletes an association for a user and an activity.    |
 
-# Data Model
+## Data Model
 
 #### USERS
 
@@ -87,11 +88,11 @@ Using Express...
 ```
 {
   id: UUID
-  name: STRING
-  industry: STRING
-  paid: BOOLEAN
-  customer_id: STRING
-  subscription_id: STRING
+  first_name: STRING
+  last_name: STRING
+  email: STRING
+  password: STRING
+  location: STRING
 }
 ```
 
@@ -102,58 +103,132 @@ Using Express...
 ```
 {
   id: UUID
-  organization_id: UUID foreign key in ORGANIZATIONS table
-  first_name: STRING
-  last_name: STRING
-  role: STRING [ 'owner', 'supervisor', 'employee' ]
-  email: STRING
-  phone: STRING
-  cal_visit: BOOLEAN
-  emp_visit: BOOLEAN
-  emailpref: BOOLEAN
-  phonepref: BOOLEAN
+  name: STRING
+  notes: STRING
+  date: STRING
+  time: STRING
+  guest_limit: INTEGER
+  organizer_id: UUID foreign key in USERS table
+  interest_id: UUID foreign key in INTERESTS table
+  location: STRING
 }
 ```
 
-## 2️⃣ Actions
+#### USER_ACTIVITIES
 
-🚫 This is an example, replace this with the actions that pertain to your backend
+---
 
-`getOrgs()` -> Returns all organizations
+```
+{
+  activity_id: UUID foreign key in ACTIVITIES table
+  user_id: UUID foreign key in USERS table
+}
+```
 
-`getOrg(orgId)` -> Returns a single organization by ID
+#### INTERESTS
 
-`addOrg(org)` -> Returns the created org
+---
 
-`updateOrg(orgId)` -> Update an organization by ID
+```
+{
+  id: UUID
+  name: STRING
+}
+```
 
-`deleteOrg(orgId)` -> Delete an organization by ID
-<br>
-<br>
-<br>
-`getUsers(orgId)` -> if no param all users
+#### USER_INTERESTS
 
-`getUser(userId)` -> Returns a single user by user ID
+---
 
-`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
+```
+{
+  interest_id: UUID foreign key in INTERESTS table
+  user_id: UUID foreign key in USERS table
+}
+```
 
-`updateUser(userId, changes object)` -> Updates a single user by ID.
+#### ACTIVITY_INTERESTS
 
-`deleteUser(userId)` -> deletes everything dependent on the user
+---
 
-## 3️⃣ Environment Variables
+```
+{
+  interest_id: UUID foreign key in INTERESTS table
+  activity_id: UUID foreign key in ACTIVITIES table
+}
+```
+
+## Actions
+
+#### AUTH
+
+`getUserByEmail(email)` -> Gets a user by email
+
+`addUser(user)` -> Adds a user
+
+#### USERS
+
+`getUsers()` -> Returns all users
+
+`getUserById(id)` -> Returns a single user by ID
+
+`updateUser(id, user)` -> Updates a single user by ID
+
+`deleteUser(id)` -> Deletes a single user by ID
+
+#### ACTIVITIES
+
+`getActivities()` -> Returns all activities
+
+`getActivityById(id)` -> Returns a single activity by ID
+
+`getActivitiesByInterests(interest_id)` -> Returns activities by interest ID
+
+`getActivitiesByOrganizer(organizer_id)` -> Returns activities by organizer ID
+
+`addActivity(activity)` -> Adds an activity
+
+`updateActivity(id, activity)` -> Updates a single activity by ID
+
+`deleteActivity(id)` -> Deletes a single activity by ID
+
+#### USER_ACTIVITIES
+
+`getAllActivities(user_id)` -> Returns all activities as user is associated with (joined or created) by user ID
+
+`getAllUserActivities()` -> Returns all user_activities
+
+`getUserActivitiesByUserId(user_id)` -> Return user_activities by user ID (used to get activities join by a user)
+
+`getUserActivitiesByActivityId(activity_id)` -> Return user_activites by activity ID (user to get the number of users joined for a specific activity)
+
+`addUserActivity(userActivity)` -> Adds a user_activity (used to join an activity)
+
+`deleteUserActivity(user_id, activity_id)` -> Deletes a user_activity (used to leave an activity)
+
+`getAllActivitiesNotAssociatedWithId(user_id)` -> Returns all activities a user is not associated with by user ID
+
+#### INTERESTS
+
+`getInterests()` -> Returns all interests
+
+`getInterestById(id)` -> Returns a single interest by ID
+
+`getUserInterests(user_id)` -> Returns all user_interests by user ID
+
+`addUserInterest(userInterest)` -> Adds a user_interest (used to add interests for a user)
+
+`deleteUserInterest(user_id, interest_id)` -> Delets a user_interest (used to remove interests for a user)
+
+## Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
 
-🚫 These are just examples, replace them with the specifics for your app
-
-_ STAGING_DB - optional development db for using functionality not available in SQLite
-_ NODE\*ENV - set to "development" until ready for "production"
-
-- JWT*SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-_=+)') for i in range(50)])
-  _ SENDGRID_API_KEY - this is generated in your Sendgrid account \* stripe_secret - this is generated in the Stripe dashboard
+- JWT_SECRET - set a specific secret
+- DB_ENV - set to "development" until ready for "production", also sets to "testing" when running tests
+- PORT - used when hosting the server or set to "5000" for development
 
 ## Contributing
 
@@ -194,5 +269,4 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
-See [Frontend Documentation](🚫link to your frontend readme here) for details on the fronend of our project.
-🚫 Add DS iOS and/or Andriod links here if applicable.
+See [Frontend Documentation](https://github.com/Lambda-School-Labs/buddy-app-fe) for details on the frontend of our project.
